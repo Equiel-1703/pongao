@@ -2,4 +2,4 @@
 .godot/
 
 # Photoshop Stuff
-.psd
+*.psd
