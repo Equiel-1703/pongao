@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://cf4b3x6sau72p"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_0v1uj"]
+[ext_resource type="PackedScene" uid="uid://b1rb5sehkrdlt" path="res://player.tscn" id="1_h1rfr"]
+[ext_resource type="PackedScene" uid="uid://cygnvxgmrddq7" path="res://barrier.tscn" id="2_b8w15"]
+[ext_resource type="PackedScene" uid="uid://ca218o6bilfm2" path="res://minha_bola.tscn" id="3_t3yto"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u8vvn"]
+size = Vector2(80, 768)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xlscy"]
+size = Vector2(80, 768)
+
+[sub_resource type="SystemFont" id="SystemFont_hokmo"]
+font_names = PackedStringArray("Consolas")
+
+[node name="Pongao" type="Node"]
+script = ExtResource("1_0v1uj")
+
+[node name="esq" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="esq"]
+position = Vector2(-40, 328)
+shape = SubResource("RectangleShape2D_u8vvn")
+
+[node name="dir" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="dir"]
+position = Vector2(1192, 328)
+shape = SubResource("RectangleShape2D_xlscy")
+
+[node name="top" parent="." instance=ExtResource("2_b8w15")]
+
+[node name="down" parent="." instance=ExtResource("2_b8w15")]
+position = Vector2(64, 648)
+
+[node name="player1" parent="." instance=ExtResource("1_h1rfr")]
+position = Vector2(96, 296)
+
+[node name="player2" parent="." instance=ExtResource("1_h1rfr")]
+position = Vector2(1056, 296)
+side = "p2"
+
+[node name="ball_respawn" type="Marker2D" parent="."]
+position = Vector2(576, 320)
+gizmo_extents = 41.2
+
+[node name="minha_bola" parent="." instance=ExtResource("3_t3yto")]
+position = Vector2(576, 320)
+
+[node name="Player1Score" type="Label" parent="."]
+offset_left = 320.0
+offset_top = 64.0
+offset_right = 448.0
+offset_bottom = 192.0
+theme_override_fonts/font = SubResource("SystemFont_hokmo")
+theme_override_font_sizes/font_size = 80
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player2Score" type="Label" parent="."]
+offset_left = 704.0
+offset_top = 64.0
+offset_right = 832.0
+offset_bottom = 192.0
+theme_override_fonts/font = SubResource("SystemFont_hokmo")
+theme_override_font_sizes/font_size = 80
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ball_respawn_timer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[connection signal="body_entered" from="esq" to="." method="_on_esq_body_entered"]
+[connection signal="body_entered" from="dir" to="." method="_on_dir_body_entered"]
+[connection signal="body_entered" from="top" to="." method="_on_top_body_entered"]
+[connection signal="body_entered" from="down" to="." method="_on_down_body_entered"]
+[connection signal="timeout" from="ball_respawn_timer" to="." method="_on_ball_respawn_timer_timeout"]
